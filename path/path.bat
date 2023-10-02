@@ -1,5 +1,5 @@
 @echo off
-set "new_path=C:\MinGW"  REM Replace with your desired path
+set "new_path=C:\MinGW\mingw64\bin"
 
 REM Check if the path already exists in the PATH environment variable
 echo %PATH% | find /i "%new_path%" > nul

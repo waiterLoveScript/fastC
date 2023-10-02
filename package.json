@@ -1,8 +1,14 @@
 {
   "name": "fastc",
   "displayName": "fastC",
-  "description": "",
-  "version": "0.0.1",
+  "description": "无需任何操作, 一键配置C/C++环境",
+  "publisher": "LoveScript",
+  "icon": "icons/icon1.jpg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/waiterLoveScript/fastC.git"
+  },
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.82.0"
   },
