@@ -7,8 +7,7 @@
 
 1. 打开命令界面（ctrl+shift+p）搜索“**一键配置C/C++**”并点击，首先扩展会自动下载MinGW的压缩包并且解压保存到C:/MinGW/目录下（技术原因，目前MinGW内置在扩展中，因此扩展较大）
 
-2. 然后扩展会启动一个**path.bat**脚本，将MinGW的bin目录添加到用户变量中
-（推荐但不要求，用户可以手动**以管理员身份运行path_root.bat**脚本来添加到系统变量，即C:/Users/your_usr_name/.vscode/extensions/lovescript.fastc/config/path_root.bat）
+2. 然后扩展会启动一段脚本，将MinGW的bin目录添加到用户变量中
 
 3. 最后扩展会在当前打开的目录下生成一个.vscode文件夹跟一个test.cpp文件，</br>
 

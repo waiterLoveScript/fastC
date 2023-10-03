@@ -44,7 +44,7 @@ async function activate(context) {
     
   const disposable = vscode.commands.registerCommand('install', async () => {
     
-    const batPath = path.join(context.extensionPath, 'path', 'path.bat');
+    //const batPath = path.join(context.extensionPath, 'path', 'path.bat');
     const zipPath = path.join(context.extensionPath, 'mingw64.zip');
     const configFolderPath = path.join(context.extensionPath, 'config', '.vscode');
     //const destnPath = './.vscode';
@@ -69,9 +69,19 @@ async function activate(context) {
 
     //await terminal.sendText('Remove-Item -Path "mingw64.zip" -Force -ErrorAction SilentlyContinue');
 
-    await terminal.sendText(`${batPath}`);
+    // TODO: 添加用户变量
+    //await terminal.sendText(`${batPath}`);
 
-    await terminal.sendText('Write-Host "Finished! Congratulations!" -ForegroundColor Green');
+    //await terminal.sendText('Write-Host "Finished! Congratulations!" -ForegroundColor Green');
+
+    await terminal.sendText("$path2add = ';C:/MinGW/mingw64/bin'\n"+
+    "$systemPath = [Environment]::GetEnvironmentVariable('Path', 'user')\n"+
+    "If (!$systemPath.contains($path2add)) {\n"+
+        "$systemPath += $path2add\n"+
+        "$systemPath = $systemPath -join ';'\n"+
+        "[Environment]::SetEnvironmentVariable('Path', $systemPath, 'User');\n"+
+        "Write-Host 'Finished! Congratulations!' -ForegroundColor Green\n"+
+    "}\n")
 
     if(!fs.existsSync(destnPath))
     {
@@ -97,6 +107,7 @@ async function activate(context) {
     vscode.env.openExternal(vscode.Uri.parse(extensionUrl));
     vscode.window.showInformationMessage('您需要下载此扩展C/C++');
     vscode.window.showInformationMessage('由于Expand-Archive较慢, 请耐心等待~后续会考虑优化');
+    vscode.window.showInformationMessage('您可以阅读一下本扩展的详情，即主页');
 
     fs.copyFileSync(path.join(context.extensionPath, 'config', 'test.cpp'), path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, 'test.cpp'));
 

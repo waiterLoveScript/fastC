@@ -13,8 +13,8 @@
                 "-g",
                 "${file}",
                 "-o",
-                //"${fileDirname}\\bin\\${fileBasenameNoExtension}.exe",//生成exe文件的路径(不支持中文命名C/C++文件)
-                "${fileDirname}\\bin\\test.exe",//生成exe文件的路径(支持中文命名C/C++文件)
+                "${fileDirname}\\bin\\${fileBasenameNoExtension}.exe",//生成exe文件的路径(不支持中文命名C/C++文件)
+                //"${fileDirname}\\bin\\test.exe",//生成exe文件的路径(支持中文命名C/C++文件)
                 "-fexec-charset=GBK",//编码格式(按照GBK格式输出可以显示中文字符)
             ],
             "options": {
