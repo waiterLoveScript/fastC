@@ -1,8 +1,11 @@
-# Change Log
 
-All notable changes to the "fastc" extension will be documented in this file.
+## [v1.1.0]
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- Significantly improves the effectiveness of use
+
+## [v1.0.2]
+
+- Fixed a bug
 
 ## [v1.0.1]
 
