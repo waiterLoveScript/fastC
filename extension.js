@@ -1,3 +1,5 @@
+// TODO: 优化代码，使得用户可以自己修改MinGW路径，使用json文件进行配置
+
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs');
@@ -15,6 +17,11 @@ async function activate(context) {
   const extensionUrl = `vscode:extension/${extensionId}`;
 
   let destnPath = 'D:/example';
+
+  let jsonData = {
+    "situation": "to_init"
+  }
+  //let jsonString = JSON.stringify(jsonData, null, 2);
 
   function copyFolder(src, dest)
   {
@@ -41,48 +48,52 @@ async function activate(context) {
       fs.mkdirSync(destnPath, { recursive: true });
     }
     copyFolder(folderPath, destnPath);
+    fs.copyFileSync(path.join(context.extensionPath, 'config', 'test.c'), path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, 'test.c'));
     fs.copyFileSync(path.join(context.extensionPath, 'config', 'test.cpp'), path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, 'test.cpp'));
   }
 
-  if(!fs.existsSync(path.join(configFolder, 'a.txt')))
+  if(!fs.existsSync(path.join(configFolder, 'settings.json')) && !fs.existsSync(path.join(configFolder, 'a.txt')))
   {
     fs.mkdirSync(configFolder, { recursive: true });
-    fs.writeFileSync(path.join(configFolder, 'a.txt'), 'to_init', 'utf-8');
+    fs.writeFileSync(path.join(configFolder, 'settings.json'), JSON.stringify(jsonData, null, 2), 'utf-8');
+
     const choice1 = await vscode.window.showInformationMessage(
       '是否立即配置C/C++环境？您也可以后续在命令面板中使用"一键配置C/C++"来配置',
       'Yes',
       'No');
     if(choice1 === 'Yes')
     {
-      vscode.commands.executeCommand('install');
+      vscode.commands.executeCommand('fastc.install');
     }
   }
+  if(!fs.existsSync(path.join(configFolder, 'settings.json')) && fs.existsSync(path.join(configFolder, 'a.txt')))
+  {
+    fs.writeFileSync(path.join(configFolder, 'settings.json'), JSON.stringify(jsonData, null, 2), 'utf-8');
+  }
   
-  const configFile = fs.readFileSync(path.join(configFolder, 'a.txt'), 'utf8').split('\n');
-  const config = configFile.filter((item) => item.trim() !== '');
+  jsonData = JSON.parse(fs.readFileSync(path.join(configFolder, 'settings.json'), 'utf8'));
 
-  if(config[0] === 'pre_copy' && vscode.workspace.workspaceFolders)
+  if(jsonData.situation === 'pre_copy' && vscode.workspace.workspaceFolders)
   {
     copyConfig();
-    fs.writeFileSync(path.join(configFolder, 'a.txt'), 'ready_install', 'utf-8');
+    jsonData.situation = 'ready_install';
+    fs.writeFileSync(path.join(configFolder, 'settings.json'), JSON.stringify(jsonData, null, 2), 'utf-8');
   }
 
     
-  const disposable = vscode.commands.registerCommand('install', async () => {
+  const disposable = vscode.commands.registerCommand('fastc.install', async () => {
 
-    const terminal = vscode.window.createTerminal({
-      shellPath: 'powershell.exe',
-      name: '配置C/C++环境'
-    });
-
-    terminal.show(true);
-
-    // TODO: 添加MinGW
+    // TODO: 优化添加MinGW
     //await terminal.sendText('Remove-Item -Path "mingw64.zip" -Force -ErrorAction SilentlyContinue');
     //await terminal.sendText('Invoke-WebRequest -Uri "https://waiterlovescript.github.io/resources/mingw64.zip" -OutFile "mingw64.zip"');
 
     if(!fs.existsSync('C:/MinGW/mingw64/bin/g++.exe'))
     {
+      const terminal = vscode.window.createTerminal({
+        shellPath: 'powershell.exe',
+        name: '配置C/C++环境'
+      });
+      terminal.show(true);
       terminal.sendText('Remove-Item -Path "C:/MinGW" -Force -Recurse -ErrorAction SilentlyContinue');
       terminal.sendText(`Expand-Archive -Path "${zipPath}" -DestinationPath "C:/MinGW"`);
       terminal.sendText("$path2add = ';C:/MinGW/mingw64/bin'\n"+
@@ -100,7 +111,7 @@ async function activate(context) {
       vscode.window.showInformationMessage('由于Expand-Archive较慢, 请耐心等待~后续会考虑优化');
     }
 
-    // TODO: 添加用户变量
+    // TODO: 优化添加环境变量
     //await terminal.sendText(`${batPath}`);
 
     //await terminal.sendText('Write-Host "Finished! Congratulations!" -ForegroundColor Green');
@@ -119,8 +130,9 @@ async function activate(context) {
       'No');
       if(choice2 === 'Yes')
       {
-          fs.writeFileSync(path.join(configFolder, 'a.txt'), 'pre_copy', 'utf-8');
-          console.log(config[0]);
+          jsonData.situation = 'pre_copy';
+          fs.writeFileSync(path.join(configFolder, 'settings.json'), JSON.stringify(jsonData, null, 2), 'utf-8');
+          console.log(jsonData.situation);
           await vscode.commands.executeCommand('workbench.action.files.openFolder');
       }
     }

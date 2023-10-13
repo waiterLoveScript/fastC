@@ -9,8 +9,8 @@
             "preLaunchTask": "C/C++",//调试前执行的任务，就是之前配置的tasks.json中的label字段
             "type": "cppdbg",//配置类型，只能为cppdbg
             "request": "launch",//请求配置类型，可以为launch（启动）或attach（附加）
-            "program": "${fileDirname}\\bin\\${fileBasenameNoExtension}.exe",//调试程序的路径名称(不支持中文命名C/C++文件)
-            //"program": "${fileDirname}\\bin\\test.exe",//调试程序的路径名称(支持中文命名C/C++文件)
+            "program": "${fileDirname}/bin/${fileBasenameNoExtension}.exe",//调试程序的路径名称(不支持中文命名C/C++文件)
+            //"program": "${fileDirname}/bin/test.exe",//调试程序的路径名称(支持中文命名C/C++文件)
             "args": [],//调试传递参数
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

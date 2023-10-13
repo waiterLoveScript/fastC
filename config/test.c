@@ -1,8 +1,8 @@
-#include<iostream>
+#include<stdio.h>
 
 int main()
 {
-    std::cout<<"Hello VSCode!"<<std::endl;
+    printf("Hello VSCode!\n");
     getchar();
     return 0;
 }
