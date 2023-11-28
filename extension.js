@@ -1,4 +1,4 @@
-// TODO: 优化代码，使得用户可以自己修改MinGW路径，使用json文件进行配置
+// TODO: 增加功能，优化使用，增加fastc.json
 
 const vscode = require('vscode');
 const path = require('path');
